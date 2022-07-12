@@ -1,5 +1,6 @@
-# CBR Jobs
+# Vue Tutorial & CBR Jobs
 
+This tutorial includes many Vue basic knowledge points
 This Demo includes code for Vue Router, Fetch, Mount Hook, v-for, v-if, v-else, props, etc.
 ![image](https://user-images.githubusercontent.com/68500948/178519179-e087c9c2-cd8b-4d11-a0da-0e4d0eb506db.png)
 
@@ -103,6 +104,8 @@ BASE_URL: process.env.VUE_APP_BASEURL
 ```
 <button @click="start" :disabled="isPlaying">play</button>
 ```
+如果想要点击事件只作用于父元素而不包含任何子元素，使用"@click.self"。
+
 还可以trigger其它键盘属性，如下例中，按下alt+某键起来就会触发名为'addSkill'的函数。函数第一个参数默认为e（也就是event）
 ```
 <input type="text" v-model="tempSkill" @keyup.alt="addSkill">
@@ -243,6 +246,36 @@ stopTimer() {
 在<style>定义的类和标签样式会被作用于全局，想要局限于组件则使用
 ```
 <style scoped></style> 
+```
+## Slot 模板
+
+子元素定义<slot>标签，在父元素使用子元素标签开合内（例如<ModalVue></ModalVue>中）传入<template>来填充对应的<slot>标签
+下例中父元素传进去的<p></p>会被填充于子元素默认的<slot>，传入的name=links的slot会被填充于v-slot:links
+
+```
+<slot>
+    xxx <!-- This only show when no default slot is passed in-->
+</slot>
+<div class="actions">
+    <slot name="links"></slot>
+</div>
+```
+```
+<ModalVue :header="header" :text="text" @close="toggleModal" theme="sale">
+    <template v-slot:links>
+        <a href="#" class="href">sign up now</a>
+        <a href="#" class="href">more info</a>
+    </template>
+    <p>Test slots</p>
+</ModalVue>
+```
+
+## teleport
+<teleport>标签将里面的元素渲染到不同于id="app"的div中，如下例会将<a>标签渲染到id为modals的div中（这些div需要在index.html中出现）
+```
+<teleport to="#modals" v-if="showModal">
+    <a href="https://google.com>Google</a>
+</teleport>
 ```
 
 ## Project setup
