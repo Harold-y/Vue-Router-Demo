@@ -3,6 +3,27 @@
 This Demo includes code for Vue Router, Fetch, Mount Hook, v-for, v-if, v-else, props, etc.
 ![image](https://user-images.githubusercontent.com/68500948/178519179-e087c9c2-cd8b-4d11-a0da-0e4d0eb506db.png)
 
+## Vue 常用命令
+安装Vue脚手架（Cli）
+```
+npm install -g @vue/cli
+```
+
+创建新项目
+```
+vue create <project-name>
+```
+
+启动Dev Server
+```
+npm run serve
+```
+
+启动Json-Server
+```
+npx json-server --watch data/db.json
+```
+
 ## 几个重要Vue板块
 
 ### data
@@ -52,6 +73,13 @@ name是名称
 ### hooks
 https://vuejs.org/guide/essentials/lifecycle.html#lifecycle-diagram
 根据不同的Lifecycle有不同的钩子，最常用的有mounted()，updated()，unmounted()三个。mounted()最适合作为initialization获取数据。
+
+mounted()例子：
+```
+mounted() {
+    fetch(this.BASE_URL + "/jobs").then(res => res.json()).then(data => this.jobs = data).catch(err => console.log(err.message))
+  }
+```
 
 ## 定义全局变量
 
@@ -118,6 +146,13 @@ v-model基于表单数据实行双向绑定，而v-bind可作用于表单外。
 ```
 除了上面的例子外，v-model绑定单个checkbox会为boolean；绑定多个checkbox需要用array承接，会把选中的checkbox的value添加到array
 
+### 动态Class
+语法是:class="{ <class_name> : <boolean expression> }"
+例如
+```
+<div :class="{ sale: theme === 'sale' }" /> 
+```
+
 ## 设置路由
 
 ### 普通路由注册
@@ -181,6 +216,33 @@ props: ['id']
 router-view，一般被放在App.vue中
 ```
 <router-view></router-view>
+```
+
+## 传参&传函数
+
+### 传参
+父元素放置子标签时使用':<var_name>'，下例中，传入名为'delay'的参数，参数var是父元素data中名为'delay'的那个（因为使用了:进行绑定）
+```
+<BlockVue :delay="delay" v-if="isPlaying" @endTimer="endGame"></BlockVue>
+```
+子元素在props中接收参数
+```
+props: ['delay']
+```
+
+### 传回调函数，使用@<function>和this.$emit
+还是上面的BlockVue例子，在BlockVue中定义下面的函数，则下面函数执行时通过this.$emit调用父元素名为"endGame"的函数，并且将子元素"reactionTime"变量作为父元素"endGame"函数第一个param。简而言之，通过this.$emit调用父元素的一个函数。
+```
+stopTimer() {
+    clearInterval(this.timer)
+    this.$emit('endTimer', this.reactionTime)
+}
+```
+
+## Style Scope
+在<style>定义的类和标签样式会被作用于全局，想要局限于组件则使用
+```
+<style scoped></style> 
 ```
 
 ## Project setup
