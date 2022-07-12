@@ -93,9 +93,95 @@ addSkill(e) {
 ```
 
 
-### v-if
+### v-if和v-show
+都可以实现隐藏元素的效果，但是v-if是动态添加/移除，v-show仅仅改变元素为隐形，仍存在于dom中
+```
+<div class="block" v-if="showBlock" @click="stopTimer">
+    click me
+</div>
+```
+v-if后可以跟随同等级v-else标签，在if为false的时候显示
 
+### v-bind和v-model
+v-model基于表单数据实行双向绑定，而v-bind可作用于表单外。
+示例：
+```
+<input type="email" required v-model="email"/>
+```
+下例中名为'role'的variable会获得选择中value的值，同时可以指定'role'初始值，这样select会自动初始选中那个option
+```
+<select v-model="role">
+    <option value="developer">Web Developer</option>
+    <option value="designer">Web Designer</option>
+    <option value="janitor">Janitor</option>
+</select>
+```
+除了上面的例子外，v-model绑定单个checkbox会为boolean；绑定多个checkbox需要用array承接，会把选中的checkbox的value添加到array
 
+## 设置路由
+
+### 普通路由注册
+需要在index.js先import，然后如下例进行使用。
+```
+{
+    path: "/",
+    name: "home",
+    component: HomeView,
+}
+```
+
+### 某个路径（a）重定向到别的地方（b）
+下例中，把/all-jobs路径重定向到/jobs
+```
+// redirect
+  {
+    path: "/all-jobs",
+    redirect: "/jobs",
+  }
+```
+
+### 把针对没有出现路由的访问重定向到404界面
+```
+// catchall 404
+  {
+    path: "/:catchAll(.*)", // regex, catch all that does not match any of the above
+    name: "Not Found",
+    component: NotFound,
+  }
+```
+
+### 详情页通过路由id访问
+下例中，我们通过jobs/id（绑定id）的形式来访问job detail，例如jobs/1
+```
+{
+    path: "/jobs/:id",
+    name: "jobDetails",
+    component: JobDetails,
+    props: true, // can accept route parameter as props
+}
+
+<router-link :to="{ name: 'jobDetails', params: { id: job.id } }">
+    <h2>{{ job.title }}</h2>
+</router-link>
+```
+我们在上文写到过，我们需要通过props来接受id参数
+```
+props: ['id']
+```
+
+### router-link
+如果使用to，那么放上path，如果用:to，那么请给予name，有时还需要params（如上例）
+```
+<router-link to="/">Home</router-link> |
+<router-link to="/about">About</router-link>
+<router-link :to="{ name: 'jobs'}">Jobs</router-link>
+```
+
+### 发生改变的视图
+router-view，一般被放在App.vue中
+```
+<router-view></router-view>
+```
 
 ## Project setup
 ```
