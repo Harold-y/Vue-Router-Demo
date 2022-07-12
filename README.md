@@ -53,6 +53,49 @@ name是名称
 https://vuejs.org/guide/essentials/lifecycle.html#lifecycle-diagram
 根据不同的Lifecycle有不同的钩子，最常用的有mounted()，updated()，unmounted()三个。mounted()最适合作为initialization获取数据。
 
+## 定义全局变量
+
+在根目录创建.env文件，变量命名方式为VUE_APPxxx，例如
+```
+VUE_APP_BASEURL = "http://localhost:3000"
+```
+获取：
+```
+BASE_URL: process.env.VUE_APP_BASEURL
+```
+
+## 标签+vue, etc.
+
+### 动态显示data
+```
+{{ <data_name> }}
+```
+### v-on: or @和其它事件
+@是v-on:缩写，多用于和Button绑定创建点击事件绑定函数。例如：（请注意，下例使用了名为'isPlaying'的variable绑定于按钮的diabled属性）
+```
+<button @click="start" :disabled="isPlaying">play</button>
+```
+还可以trigger其它键盘属性，如下例中，按下alt+某键起来就会触发名为'addSkill'的函数。函数第一个参数默认为e（也就是event）
+```
+<input type="text" v-model="tempSkill" @keyup.alt="addSkill">
+```
+函数示例：
+```
+addSkill(e) {
+    if (e.key === ',' && this.tempSkill) {
+        if (!this.skills.includes(this.tempSkill))
+            {
+                this.skills.push(this.tempSkill)
+            }
+        this.tempSkill = ''
+    }
+}
+```
+
+
+### v-if
+
+
 
 ## Project setup
 ```
